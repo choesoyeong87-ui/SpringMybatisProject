@@ -1,0 +1,129 @@
+package com.zeus.controller;
+
+import java.util.List;
+
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.zeus.domain.Board;
+import com.zeus.service.BoardService;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@MapperScan(basePackages = "com.zeus.mapper")
+@RequestMapping("/board")
+public class BoardController {
+	@Autowired
+	private BoardService boardService;
+
+	@GetMapping("/insertForm")
+	public String boaradInsertForm(Model model) {
+		return "board/insertForm";
+	}
+
+	@PostMapping("/insert")
+	public String boaradInsert(Board board, Model model) {
+		log.info("insert board = " + board.toString());
+		try {
+			boardService.create(board);
+		}catch(Exception e) {
+		e.printStackTrace();
+		model.addAttribute("message", "%s님의 게시판 등록이 실패하였습니다.".formatted(board.getWriter()));
+		return "board/failed";
+	}
+		return "board/success";
+	}
+
+	@GetMapping("/boardList")
+	public String boaradList(Model model) {
+		log.info("boaradList");
+		try {
+			List<Board> boardList = boardService.list();
+			model.addAttribute("boardList", boardList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "board/boardList";
+	}
+
+	@GetMapping("/detail")
+	public String boaradList(Board b, Model model) {
+		log.info("boaradDetail board = " + b.toString());
+		try {
+			Board board = boardService.read(b);
+			if (board != null) {
+				model.addAttribute("message", "%d님의 상세정보 불러오기를 실패하였습니다.".formatted(b.getNo()));
+				return "board/failed";
+			}
+			model.addAttribute("board", board);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "board/detail";
+	}
+
+	@GetMapping("/delete")
+	public String boardDelete(Board board, Model model) {
+		log.info("boaradDetail board = " + board.toString());
+		try {
+			boardService.delete(board);
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("message", "%d님의 정보가 삭제되었습니다.".formatted(board.getNo()));
+			return "board/success";
+		}
+		model.addAttribute("message", "%d님의 정보삭제가 실패되었습니다.".formatted(board.getNo()));
+		return "board/failed";
+	}
+
+	@GetMapping("/updateForm")
+	public String boardUpdateForm(Board b, Model model) {
+		log.info("boardUpdateForm board = " + b.toString());
+		try {
+			Board board = boardService.read(b);
+			if (board == null) {
+				model.addAttribute("message", "%d님의 정보가 없습니다.".formatted(board.getNo()));
+				return "board/failed";
+			}
+			model.addAttribute("board", board);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "board/updateForm";
+	}
+
+	@PostMapping("/update")
+	public String boardUpdate(Board b, Model model) {
+		log.info("boardUpdateForm board = " + b.toString());
+		try {
+			boardService.update(b);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("message", "%s님의 정보가 수정되었습니다.".formatted(b.getWriter()));
+			return "board/success";
+		}
+			model.addAttribute("message", "%s님의 정보가 수정되지않았습니다.".formatted(b.getWriter()));
+			return "board/failed";
+		}
+	
+
+	@GetMapping("/search")
+	public String boaradSearch(Board board, Model model) {
+		log.info("boardsearch board"+board.toString());
+		try {
+			List<Board> boardList = boardService.search(board);
+			model.addAttribute("boardList", boardList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "board/boardList";
+	}
+}
