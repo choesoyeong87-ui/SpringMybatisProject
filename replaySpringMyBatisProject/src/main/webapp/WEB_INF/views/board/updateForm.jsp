@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,34 +31,35 @@
 
 <div class="form-card">
     <div class="form-header">
-        <h3 class="m-0">게시판 수정</h3>
+        <h3 class="m-0">${board.writer} 님의 게시판 수정</h3>
         <p class="small opacity-75 mt-2">당신의 생각을 자유롭게 적어주세요.</p>
     </div>
     
     <div class="form-body">
-        <form action="/board/insert" method="post">
+        <form action="/board/update" method="post">
             
             <div class="form-floating mb-3">
-                <input type="text" name="title" class="form-control shadow-none" id="title" placeholder="Title" required>
+                <input type="text" name="title" class="form-control shadow-none" id="title" placeholder="Title" value="${board.title}" required>
                 <label for="title">제목</label>
             </div>
 
             <div class="form-floating mb-3">
-                <input type="text" name="writer" class="form-control shadow-none" id="writer" value="${board.no}" readonly>
-                <label for="writer">작성자번호</label>
+                <input type="text" name="no" class="form-control shadow-none" id="no" value="${board.no}" readonly>
+                <label for="no">작성자 번호</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" name="writer" class="form-control shadow-none" id="writer" placeholder="Writer" required>
+                <input type="text" name="writer" class="form-control shadow-none" id="writer" placeholder="Writer" value="${board.writer}" required>
                 <label for="writer">작성자</label>
             </div>
 
             <div class="form-floating mb-4">
-                <textarea name="content" class="form-control shadow-none" id="content" placeholder="Content" style="height: 200px" required></textarea>
+                <textarea name="content" class="form-control shadow-none" id="content"  style="height: 200px">
+                ${board.content}</textarea>
                 <label for="content">내용을 입력하세요...</label>
             </div>
 
             <div class="d-flex gap-2">
-                <a href="/board/boardList" class="btn btn-light w-25" style="width: 40% !important; white-space: normal;"> 게시판리스트 </a>
+                <a href="/board/boardList" class="btn btn-light w-25" style="width: 40% !important; white-space: normal;"> 게시판<br>리스트 </a>
                 <button type="submit" class="btn btn-submit">수정전송</button>
                 <button type="reset" class="btn btn-submit">수정취소</button>
             </div>
