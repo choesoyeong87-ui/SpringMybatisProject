@@ -10,7 +10,7 @@
 	<select id="read" resultType="Board">
 		SELECT no, title, content,
 		writer, REGDATE FROM mybatisBoard
-		WHERE no = #{boardNo}
+		WHERE no = #{no}
 	</select>
 	<update id="update">
 		UPDATE mybatisBoard

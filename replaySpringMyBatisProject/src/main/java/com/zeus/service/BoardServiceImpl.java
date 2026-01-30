@@ -19,8 +19,8 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void create(Board b) throws Exception {
-        mapper.create(b);
+    public int create(Board b) throws Exception {
+    	 return  mapper.create(b);
     }
 
     @Override
@@ -31,15 +31,15 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void update(Board board) throws Exception {
-        mapper.update(board);
+    public int update(Board board) throws Exception {
+        return mapper.update(board);
 
     }
 
     @Override
     @Transactional
-    public void delete(Board board) throws Exception {
-            mapper.delete(board);
+    public int delete(Board board) throws Exception {
+            return mapper.delete(board);
     }
 
     @Override
